@@ -1,0 +1,5 @@
+#!/bin/bash
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+cd "$HOME"
+xterm -xrm 'XTerm*selectToClipboard: true' &
+exec openbox

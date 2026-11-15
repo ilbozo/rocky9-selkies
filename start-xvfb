@@ -1,0 +1,5 @@
+#!/bin/bash
+node=$(ls /dev/dri/renderD* 2>/dev/null | head -1)
+exec /opt/xlibre/bin/Xvfb :20 -verbose 1 +extension COMPOSITE +extension DAMAGE +extension GLX \
+  +extension RANDR +extension RENDER +extension MIT-SHM +extension XFIXES +extension XTEST \
+  +iglx +render -nolisten tcp -shmem -s 0 -dpms -screen 0 7680x4320x24 ${node:+-glamor -dri $node}

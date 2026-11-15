@@ -1,0 +1,12 @@
+[Unit]
+Description=Desktop session on the Selkies display
+After=xvfb.service
+Requires=xvfb.service
+[Service]
+User=rocky
+EnvironmentFile=/etc/selkies/gpu.env
+ExecStartPre=/usr/local/bin/wait-x
+ExecStart=/usr/local/bin/start-session
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+FROM rocky9-selkies:stage1
+RUN dnf -y install systemd-pam gnome-shell gnome-session-xsession gnome-settings-daemon gnome-terminal \
+      nautilus adwaita-icon-theme dejavu-sans-fonts dejavu-sans-mono-fonts liberation-fonts \
+      xdg-user-dirs dconf pipewire pipewire-pulseaudio wireplumber xclip && dnf clean all
+COPY pam-selkies-session /etc/pam.d/selkies-session
+COPY dconf-profile /etc/dconf/profile/user
+COPY dconf-selkies /etc/dconf/db/local.d/00-selkies
+COPY gpu.env /etc/selkies/gpu.env
+COPY start-session /usr/local/bin/start-session
+COPY session.service selkies.service /etc/systemd/system/
+RUN chmod 755 /usr/local/bin/start-session && dconf update && \
+    mkdir -p /var/lib/systemd/linger && touch /var/lib/systemd/linger/rocky
+COPY polkit-colord.rules /etc/polkit-1/rules.d/45-selkies-colord.rules
+RUN systemctl mask low-memory-monitor.service

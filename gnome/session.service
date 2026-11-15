@@ -1,0 +1,16 @@
+[Unit]
+Description=GNOME session on the Selkies display
+After=xvfb.service systemd-logind.service user@1000.service
+Requires=xvfb.service
+Wants=user@1000.service
+[Service]
+User=rocky
+PAMName=selkies-session
+EnvironmentFile=/etc/selkies/gpu.env
+Environment=XDG_SESSION_TYPE=x11 XDG_SESSION_CLASS=user XDG_SESSION_DESKTOP=gnome XDG_CURRENT_DESKTOP=GNOME
+ExecStartPre=/usr/local/bin/wait-x
+ExecStart=/usr/local/bin/start-session
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target

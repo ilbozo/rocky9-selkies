@@ -1,0 +1,9 @@
+[Unit]
+Description=XLibre Xvfb on the NVIDIA GPU
+[Service]
+User=rocky
+EnvironmentFile=/etc/selkies/gpu.env
+ExecStart=/usr/local/bin/start-xvfb
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

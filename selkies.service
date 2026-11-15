@@ -1,0 +1,14 @@
+[Unit]
+Description=Selkies streaming server
+After=xvfb.service
+Requires=xvfb.service
+[Service]
+User=rocky
+EnvironmentFile=/etc/selkies/gpu.env
+EnvironmentFile=-/etc/selkies/selkies.env
+Environment=SELKIES_ENABLE_HTTPS=false SELKIES_AUDIO_ENABLED=false SELKIES_PORT=8080
+ExecStartPre=/usr/local/bin/wait-x
+ExecStart=/usr/local/bin/selkies --public
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

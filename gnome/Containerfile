@@ -12,3 +12,11 @@ RUN chmod 755 /usr/local/bin/start-session && dconf update && \
     mkdir -p /var/lib/systemd/linger && touch /var/lib/systemd/linger/rocky
 COPY polkit-colord.rules /etc/polkit-1/rules.d/45-selkies-colord.rules
 RUN systemctl mask low-memory-monitor.service
+
+# Optional: passwordless sudo for the desktop user (build with --build-arg ENABLE_SUDO=1)
+ARG ENABLE_SUDO=0
+RUN if [ "$ENABLE_SUDO" = "1" ]; then \
+      dnf -y install sudo && dnf clean all && \
+      usermod -aG wheel rocky && \
+      echo 'rocky ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/rocky && chmod 440 /etc/sudoers.d/rocky; \
+    fi

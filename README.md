@@ -142,10 +142,22 @@ image with the same command.
 | Which GPU | `--device nvidia.com/gpu=0`; list names with `nvidia-ctk cdi list`, or use `all` |
 | Home directory | `-v rocky9-home:/home/rocky` (named volume); a host folder also works |
 | Port | `-p 127.0.0.1:8080:8080` |
+| Passwordless sudo for `rocky` | build stage 2 with `--build-arg ENABLE_SUDO=1` (off by default) |
 | Other Selkies settings | add `SELKIES_*` variables to `selkies.env`; see `selkies --help` |
 
 `--security-opt label=disable` is there because SELinux otherwise blocks access
 to the GPU devices from the container.
+
+`ENABLE_SUDO=1` installs `sudo`, adds `rocky` to `wheel` and allows it without a
+password, so you can run `sudo dnf install ...` from the desktop terminal. Packages
+installed this way live in the container's writable layer and are lost when the
+container is removed; put anything permanent in a Containerfile. It gives the
+desktop user full admin rights inside the container, which is why it is off by
+default:
+
+```bash
+podman build --build-arg ENABLE_SUDO=1 -t rocky9-selkies:stage2 -f gnome/Containerfile gnome/
+```
 
 ## Checking that it works
 
